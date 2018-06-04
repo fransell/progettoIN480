@@ -307,7 +307,7 @@ Tests are an integrating part of the usual activities of the developers, because
 
 The \textbf{BoxCalculation} takes the vertices of a primitive objects in input and returns the volume or the area of the box which contains the chosen object, depending on its dimensions.
 
-Furthermore, the \textfb{size} and \textfb{length} functions are used to obtain respectively the number of vertices and the number of edges of the primitive objects (whose control values were taken from Python).
+Furthermore, the \textbf{size} and \textbf{length} functions are used to obtain respectively the number of vertices and the number of edges of the primitive objects (whose control values were taken from Python).
 
 Therefore in each test values are assigned to the parameters of each function of every single primitive object and is checked that the output of this functions corresponds to the expected value, thus showing the correctness of the code.
 
@@ -347,7 +347,7 @@ end
 
 \paragraph{Vectorization\\}
 
-With the term vectorization, we mean the application of an $f(x)$ function to each element in an array $[x_1,x_2,..x_n]$ so that the collection $[f(x_1),...,f(x_n)]$ is created. The Julia syntax for this operation is f.(V) where V is the array.
+With the term vectorization, we mean the application of an $f(x)$ function to each element in an array $[x_1,x_2,..x_n]$ so that the collection $[f(x_1),...,f(x_n)]$ is created. The Julia syntax for this operation is f.(V) where V is the array. Generally vectorization helps to accelerate the execution times on a single processor.
 
 \begin{Verbatim}
 function larCircleV(radius=1.,angle=2*pi)
@@ -546,8 +546,8 @@ LARVIEW.viewexploded(V,CV)
 	@test BoxCalculation(larHelix(1,2,5)()[1])==40
 	@test BoxCalculation(larHelix(1,1,3)()[1])==12
 	#=
-	radius=1, step=1, numspins=2, is contained
-	in a box that has volume (radius*2)^2*step*numspins
+	radius=1, pitch=1, nturns=2, is contained
+	in a box that has volume (radius*2)^2*pitch*nturns
 	=#
 	@test size(larHelix(5,7,9)()[1],2)==325
 	@test length(larHelix(5,7,9)()[2])==324
@@ -688,7 +688,7 @@ function larDisk(radius=1.,angle=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larDisk} function creates a disk centered in the origin, with given radius and angle.
+The \textbf{larDisk} function creates a disk centered in the origin, with given radius and angle.
 
 Using the $larCuboids()$ function, contained in the LARLIB library, a domain shape is given in input and a cuboidal complex is created. This complex will be modified using the $map$ function to apply the desired parametrization to the coordinates of each vertex.
 
@@ -736,7 +736,8 @@ function larDiskV(radius=1.,angle=2*pi)
     function larDisk0(shape=[36,1])
         V,CV = LARLIB.larCuboids(shape)
         V = [V[:,k] for k=1:size(V,2)]
-        W = (p->[p[2]*cos(p[1]);p[2]*sin(p[1])]).((p->[p[1]*angle/shape[1], p[2]*radius/shape[2]]).(V))
+        W = (p->[p[2]*cos(p[1]);p[2]*sin(p[1])]).((p->[p[1]*angle/shape[1],
+            p[2]*radius/shape[2]]).(V))
         return hcat(W...),CV
     end
     return larDisk0    
@@ -865,7 +866,7 @@ function larHelicoid(R=1.,r=0.5,pitch=1.,nturns=2)
 end
 \end{verbatim}
 
-The \textfb{larHelicoid} function creates an helical surface that wrap itself around the $z$ axis, with given radius, step and number of rounds.
+The \textbf{larHelicoid} function creates an helical surface that wrap itself around the $z$ axis, with given radius, step and number of rounds.
 
 Using the $larCuboids()$ function, contained in the LARLIB library, a domain shape is given in input and a cuboidal complex is created. This complex will be modified using the $map$ function to apply the desired parametrization to the coordinates of each vertex.
 
@@ -907,8 +908,8 @@ p.VIEW(hpc)
 	@test BoxCalculation(larHelicoid(1,0.5,2,5)()[1])==40
 	@test BoxCalculation(larHelicoid(1,0.3,1,3)()[1])==12
 	#=
-	raggio=1, passo=1, numgiri=2, è contenuto in un
-	parallelepipedo di volume (raggio*2)^2*passo*numgiri
+	radius=1, pitch=1, nturns=2, is contained in a
+	box that has volume (radius*2)^2*pitch*nturns
 	=#
 	@test size(larHelicoid(1.3,0.7,1,3)()[1],2)==327
 	@test length(larHelicoid(1.3,0.7,1,3)()[2])==432
@@ -1052,7 +1053,7 @@ function larRing(r1,r2,angle=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larRing} function creates a ring centered in the origin with given radiuses and angle.
+The \textbf{larRing} function creates a ring centered in the origin with given radiuses and angle.
 
 In this case, the local parametrization used is:
 $$f(u,v)=(vcos(u),vsen(u)),$$
@@ -1235,7 +1236,7 @@ return larCylinder0
 end
 \end{verbatim}
 
-The \textfb{larCylinder} function created a cylinder centered in the origin with given radius, height and angle.
+The \textbf{larCylinder} function created a cylinder centered in the origin with given radius, height and angle.
 
 In this case, the local parametrization used is:
 $$f(u,v)=(radius*cos(u),radius*sen(u),height*v),$$
@@ -1420,7 +1421,7 @@ def larSphere(radius=1,angle1=PI,angle2=2*PI):
 end
 \end{verbatim}
 
-The \textfb{larSphere} function creates a sphere centered in the origin with given radius and angles. 
+The \textbf{larSphere} function creates a sphere centered in the origin with given radius and angles. 
 
 In this case, the local parametrization used is:
 $$f(u,v)=(radius*cos(u)*cos(v);radius*cos(u)*sin(v);radius*sin(u)),$$
@@ -1608,7 +1609,7 @@ function larToroidal(r=1,R=2,angle1=2*pi,angle2=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larToroidal} function creates a torus with given radiuses (radius of the circle that generates the torus and distance from the origin) and angles.
+The \textbf{larToroidal} function creates a torus with given radiuses (radius of the circle that generates the torus and distance from the origin) and angles.
 
 In this case, the local parametrization used is:
 $$f(u,v)=(R+rcos(u)cos(v),R+rcos(u)sen(v),-rsen(u)),$$
@@ -1787,7 +1788,7 @@ def larCrown(r,R,angle=2*PI):
 end
 \end{verbatim}
 
-The \textfb{larCrown} function creates an outer shell of torus with given radiuses and angle.
+The \textbf{larCrown} function creates an outer shell of torus with given radiuses and angle.
 
 In this case, the local parametrization used is:
 $$f(u,v)=(R+rcos(u)cos(v),R+rcos(u)sen(v),-rsen(u)),$$
@@ -1955,7 +1956,7 @@ function larBox(minVect,maxVect)
 end 
 \end{verbatim}
 
-The \textfb{larBox} function creates a rectangle parallelepiped with given extremes ($minVect$ and $maxVect$).
+The \textbf{larBox} function creates a rectangular parallelepiped with given extremes ($minVect$ and $maxVect$).
 
 With $$\verb!siz=maxVect-minVect!$$ an array subtraction is performed, subtracting component by component.
 
@@ -2098,7 +2099,7 @@ function larBall(radius=1,angle1=pi,angle2=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larBall} function creates a sphere centered in the origin with given radius and angles.
+The \textbf{larBall} function creates a sphere centered in the origin with given radius and angles.
 
 The model to "fill" is generated with $$\verb!V,CV = larSphere(radius,angle1,angle2)(shape)!$$. In this case, a spherical surface.
 
@@ -2109,7 +2110,7 @@ With $$\verb!W = [map(approxVal(4),v) for v in W]!$$ we round every element of e
 \verb!Set(W)! deletes the doubles in W and saves them in a set, with $collect$ this collection is turned back into an array of arrays: the elements are the coordinates of the sphere vertices.
 With the $hcat$ function the coordinates of the vertices just created are arranged vertically in a matrix.
 
-Named \verb!n=size(X, 2)! the number of columns in X, then the function returns the matrix X of the vertices and the array $[0,1,2,3,...,n-1]$.
+Let \verb!n=size(X, 2)! the number of columns in X, then the function returns the matrix X of the vertices and the array $[0,1,2,3,...,n-1]$.
 
 \paragraph{Visualization examples}
 
@@ -2268,7 +2269,7 @@ function larRod(radius=1,height=3,angle=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larRod} function creates a solid rod centered in the origin of given radius, height and angle.
+The \textbf{larRod} function creates a solid rod centered in the origin of given radius, height and angle.
 
 The model to "fill" is generated with $$\verb!V,CV = larCylinder(radius,height,angle)(shape)!$$ in this case a cylinder. 
 
@@ -2279,7 +2280,7 @@ With $$\verb!W = [map(approxVal(4),v) for v in W]!$$ we round every element of e
 \verb!Set(W)! deletes the doubles contained in W and saves them in a set, with $collect$ this collection is turned back into an array of arrays: the elements are the coordinates of the cylinder.
 With the $hcat$ function the coordinates of the vertices just created are arranged vertically in a matrix.
 
-Named \verb!n=size(X,2)! the number of columns in X, then the function returns the vertices matrix X and the array $[0,1,2,3,...,n-1]$.
+Let \verb!n=size(X,2)! the number of columns in X, then the function returns the vertices matrix X and the array $[0,1,2,3,...,n-1]$.
 
 \paragraph{Visualization examples}
 
@@ -2426,7 +2427,7 @@ function larHollowCyl(r,R,height,angle=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larHollowCyl} function creates an hollow cylinder with given radiuses, height and angle.
+The \textbf{larHollowCyl} function creates an hollow cylinder with given radiuses, height and angle.
 
 In this case, the local parametrization used is:
 $$f(u,v,z)=(vcos(u);vsin(u);z),$$
@@ -2557,7 +2558,8 @@ end
 \begin{Verbatim}
 data = [[x,1,1] for x in data2]
 
-x,y = TimeGraph(larHollowCyl(1,2,1),larHollowCylP(1,2,1),larHollowCylPP(1,2,1),larHollowCylV(1,2,1),data,5)
+x,y = TimeGraph(larHollowCyl(1,2,1),larHollowCylP(1,2,1),
+larHollowCylPP(1,2,1),larHollowCylV(1,2,1),data,5)
 plot(x,y,yaxis=("tempo di esecuzione (s)"),xaxis=("Input",(1,length(x)+2)),
 label=["Seq" "Par1" "Par2" "Vec"],title="larHollowCyl",lw=1)
 
@@ -2603,7 +2605,7 @@ function larHollowSphere(r,R,angle1=pi,angle2=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larHollowSphere} function creates an hollow sphere with given radiuses and angles.
+The \textbf{larHollowSphere} function creates an hollow sphere with given radiuses and angles.
 
 In this case, the local parametrization used is:
 $$f(u,v,z)=(zcos(u)cos(v);zcos(u)sin(v);zsin(u)),$$
@@ -2743,7 +2745,8 @@ end
 \begin{Verbatim}
 data = [[x,1,1] for x in data2]
 
-x,y = TimeGraph(larHollowSphere(1,2),larHollowSphereP(1,2),larHollowSpherePP(1,2),larHollowSphereV(1,2),data,5)
+x,y = TimeGraph(larHollowSphere(1,2),larHollowSphereP(1,2),
+larHollowSpherePP(1,2),larHollowSphereV(1,2),data,5)
 plot(x,y,yaxis=("tempo di esecuzione (s)"),xaxis=("Input",(1,length(x)+2)),
 label=["Seq" "Par1" "Par2" "Vec"],title="larHollowSphere",lw=1)
 
@@ -2788,7 +2791,7 @@ function larTorus(r,R,angle1=2*pi,angle2=2*pi)
 end
 \end{verbatim}
 
-The \textfb{larTorus} function creates a solid torus with given radiuses (radius of the circumference that generates it and distance from origin) and angle.
+The \textbf{larTorus} function creates a solid torus with given radiuses (radius of the circumference that generates it and distance from origin) and angle.
 
 In this case, the local parametrization used is:
 $$f(u,v,z)=((R+zcos(u))cos(v);(R+zcos(u))sin(v);-zsin(u)),$$ 
@@ -2841,7 +2844,8 @@ function larTorusV(r,R,angle1=2*pi,angle2=2*pi)
         V,CV = LARLIB.larCuboids(shape)
         V = [V[:,k] for k=1:size(V,2)]
         W = (p->[(R+p[3]*cos(p[1]))*cos(p[2]);(R+p[3]*cos(p[1]))*sin(p[2]);
-            -p[3]*sin(p[1])]).((x->[x[1]*angle1/shape[1],x[2]*angle2/shape[2], x[3]*r/shape[3]]).(V))
+            -p[3]*sin(p[1])]).((x->[x[1]*angle1/shape[1],x[2]*angle2/shape[2], 
+                x[3]*r/shape[3]]).(V))
        return hcat(W...),CV
     end
     return larTorus0
@@ -2989,7 +2993,7 @@ With \verb!H = hcat(X,[0 0;0 0;-r r])! we add, at the end of the X matrix, the s
 -r & r
 \end{bmatrix}
 \]
-Named \verb!n=size(H,2)! the number of columns in H, then the function returns the matrix H of the vertices and the array $[0,1,2,3,...,n-1]$.
+Let \verb!n=size(H,2)! the number of columns in H, then the function returns the matrix H of the vertices and the array $[0,1,2,3,...,n-1]$.
 
 \paragraph{Visualization examples}
 
@@ -3013,7 +3017,7 @@ p.VIEW(hpc)
 @testset "larPizza" begin
 	@test BoxCalculation(larPizza(1,2,pi/2)()[1])==18
 	@test BoxCalculation(larPizza(0.5,2,pi)()[1])==12.5
-	#(((R+r)*2)^2)*r se angolo=pi
+	#(((R+r)*2)^2)*r if angle=pi
 	@test size(larPizza(0.03,5.6,pi/9)()[1],2)==927
 	@test length(larPizza(0.03,5.6,pi/9)()[2])==1
 end
